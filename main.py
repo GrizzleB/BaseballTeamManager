@@ -1,27 +1,11 @@
-import csv
 from decimal import Decimal
 from decimal import ROUND_HALF_UP
-
-
-FILENAME = "players.csv"
-
-
-def read_players():
-    players = []
-    with open(FILENAME, newline="") as file:
-        reader = csv.reader(file)
-        for row in reader:
-            players.append(row)
-    return players
-
-
-def write_players(players):
-    with open(FILENAME, "w", newline="") as file:
-        writer = csv.writer(file)
-        writer.writerows(players)
+from db import read_players
+from db import write_players
 
 
 def list_players(players):
+    print()
     print(f"{'':4}{'Player':12} {'POS':4} {'AB':6} {'H':6} {'AVG'}")
     print("-" * 60)
 
@@ -29,6 +13,18 @@ def list_players(players):
         avg = Decimal(player[3]) / Decimal(player[2])
         avg = avg.quantize(Decimal("1.000"), ROUND_HALF_UP)
         print(f"{i:<3} {player[0]:12} {player[1]:4} {player[2]:6} {player[3]:6} {avg}")
+    print()
+
+
+def add_player(players):
+    name = input("Name: ")
+    position = input("Position: ").upper()
+    at_bats = input("At bats: ")
+    hits = input("Hits: ")
+    player = [name, position, at_bats, hits]
+    players.append(player)
+    write_players(players)
+    print(f"{name} was added.\n")
 
 
 def display_menu():
@@ -54,11 +50,14 @@ def main():
         command = input("Command: ")
         if command == "1":
             list_players(players)
+        elif command == "2":
+            add_player(players)
         elif command == "7":
             break
         else:
-            print("Invalid command. Please try again.")
-    print("\nFarewell")
+            display_menu()
+            print("Invalid command. Please try again.\n")
+    print("\nTake care!")
 
 
 if __name__ == "__main__":

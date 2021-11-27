@@ -50,13 +50,78 @@ def remove_player(players):
         if index < 1 or index > len(players):
             print("Invalid lineup number.\n")
         else:
-            player = players.pop(index - 1)
-            write_players(players)
-            print(f"{player[0]} was removed.\n")
+            break
+    player = players.pop(index - 1)
+    write_players(players)
+    print(f"{player[0]} was removed.\n")
 
 
-#  def edit_position(players):
+def move_player(players):
+    while True:
+        index = int(input("Lineup number: "))
+        if index < 1 or index > len(players):
+            print("Invalid lineup number.\n")
+        else:
+            break
+    player = players[index - 1]  # save some typing
+    print(f"You have selected {player[0]}")
+    while True:
+        new_index = int(input("New lineup number: "))
+        if new_index == 0 or new_index > len(players):
+            print("Invalid lineup number. Please try again.")
+        else:
+            break
+    old = players.pop(index - 1)
+    players.insert(new_index - 1, old)
+    write_players(players)
+    print(f"{old[0]} was moved.\n")
 
+
+def edit_position(players):
+    while True:
+        index = int(input("Lineup number: "))
+        if index < 1 or index > len(players):
+            print("Invalid lineup number.\n")
+        else:
+            break
+    player = players[index - 1]  # save some typing
+    print(f"You have selected {player[0]}, POS = {player[1]}")
+    while True:
+        position = input("Position: ").upper()
+        if position in POSITIONS:
+            break
+        else:
+            print("Invalid position. Please try again.")
+    player[1] = position
+    write_players(players)
+    print(f"{player[0]} was updated.\n")
+
+
+def edit_stats(players):
+    while True:
+        index = int(input("Lineup number: "))
+        if index < 1 or index > len(players):
+            print("Invalid lineup number.\n")
+        else:
+            break
+    player = players[index - 1]  # save some typing
+    print(f"You have selected {player[0]}, AB = {player[2]} H = {player[3]}")
+    while True:
+        at_bats = input("At bats: ")
+        if int(at_bats) >= 0:
+            break
+        else:
+            print("Cannot be negative. Please try again.")
+    while True:
+        hits = input("Hits: ")
+        if int(hits) >= 0:
+            break
+        else:
+            print("Cannot be negative. Please try again.")
+    player[2] = at_bats
+    player[3] = hits
+    write_players(players)
+    print(f"{player[0]} was updated.\n")
 
 
 def display_menu():
@@ -86,6 +151,12 @@ def main():
             add_player(players)
         elif command == "3":
             remove_player(players)
+        elif command == "4":
+            move_player(players)
+        elif command == "5":
+            edit_position(players)
+        elif command == "6":
+            edit_stats(players)
         elif command == "7":
             break
         else:

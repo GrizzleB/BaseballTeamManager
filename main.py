@@ -3,8 +3,6 @@ from decimal import ROUND_HALF_UP
 from db import read_players
 from db import write_players
 
-POSITIONS = ("C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "P")
-
 
 def list_players(players):
     print()
@@ -19,14 +17,16 @@ def list_players(players):
 
 
 def add_player(players):
+    positions = ("C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "P")
+
     name = input("Name: ")
-    while True:  # Ensure the position is legitimate
+    while True:
         position = input("Position: ").upper()
-        if position in POSITIONS:
+        if position in positions:
             break
         else:
             print("Invalid position. Please try again.")
-    while True:  # Ensure they don't use negatives
+    while True:
         at_bats = input("At bats: ")
         if int(at_bats) >= 0:
             break
@@ -34,7 +34,9 @@ def add_player(players):
             print("Cannot be negative. Please try again.")
     while True:
         hits = input("Hits: ")
-        if int(hits) >= 0:
+        if int(hits) > int(at_bats):
+            print("Cannot be greater than total at bats. Try again.")
+        elif int(hits) >= 0:
             break
         else:
             print("Cannot be negative. Please try again.")
@@ -63,7 +65,7 @@ def move_player(players):
             print("Invalid lineup number.\n")
         else:
             break
-    player = players[index - 1]  # save some typing
+    player = players[index - 1]
     print(f"You have selected {player[0]}")
     while True:
         new_index = int(input("New lineup number: "))
@@ -78,17 +80,19 @@ def move_player(players):
 
 
 def edit_position(players):
+    positions = ("C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "P")
+
     while True:
         index = int(input("Lineup number: "))
         if index < 1 or index > len(players):
             print("Invalid lineup number.\n")
         else:
             break
-    player = players[index - 1]  # save some typing
+    player = players[index - 1]
     print(f"You have selected {player[0]}, POS = {player[1]}")
     while True:
         position = input("Position: ").upper()
-        if position in POSITIONS:
+        if position in positions:
             break
         else:
             print("Invalid position. Please try again.")
@@ -104,7 +108,7 @@ def edit_stats(players):
             print("Invalid lineup number.\n")
         else:
             break
-    player = players[index - 1]  # save some typing
+    player = players[index - 1]
     print(f"You have selected {player[0]}, AB = {player[2]} H = {player[3]}")
     while True:
         at_bats = input("At bats: ")
@@ -114,7 +118,9 @@ def edit_stats(players):
             print("Cannot be negative. Please try again.")
     while True:
         hits = input("Hits: ")
-        if int(hits) >= 0:
+        if int(hits) > int(at_bats):
+            print("Cannot be greater than total at bats. Try again.")
+        elif int(hits) >= 0:
             break
         else:
             print("Cannot be negative. Please try again.")
@@ -141,8 +147,8 @@ def display_menu():
 
 
 def main():
-    display_menu()
     players = read_players()
+    display_menu()
     while True:
         command = input("Menu option: ")
         if command == "1":
